@@ -19,7 +19,7 @@
             position: relative;
         }
 
-        /* Animated Galaxy Background */
+    
         .galaxy-bg {
             position: fixed;
             top: 0;
@@ -52,7 +52,7 @@
             50% { opacity: 1; transform: scale(1.5); }
         }
 
-        /* Navigation Header */
+       
         .nav-header {
             background: rgba(13, 17, 23, 0.85);
             backdrop-filter: blur(20px);
@@ -122,7 +122,7 @@
             width: 100%;
         }
 
-        /* Main Dashboard Container */
+   
         .dashboard-container {
             max-width: 1400px;
             margin: 5rem auto 2rem;
@@ -133,7 +133,7 @@
             min-height: calc(100vh - 7rem);
         }
 
-        /* Sidebar Panel */
+      
         .sidebar {
             background: rgba(17, 24, 39, 0.8);
             backdrop-filter: blur(10px);
@@ -196,7 +196,7 @@
             margin-left: 0.25rem;
         }
 
-        /* Main Content Area */
+       
         .main-content {
             animation: fadeIn 0.8s ease-out;
         }
@@ -206,7 +206,6 @@
             to { opacity: 1; }
         }
 
-        /* Visualization Canvas */
         .visualization-area {
             background: rgba(17, 24, 39, 0.8);
             backdrop-filter: blur(10px);
@@ -228,10 +227,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s ease; /* Added for smooth zoom */
+            transition: transform 0.3s ease; 
         }
 
-        /* Solar System Animation */
         .solar-system {
             position: relative;
             width: 400px;
@@ -327,7 +325,7 @@
             box-shadow: 0 0 30px rgba(255, 107, 107, 1);
         }
 
-        /* Control Panel */
+
         .control-panel {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -386,7 +384,7 @@
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
         }
 
-        /* Action Buttons */
+      
         .btn {
             padding: 0.75rem 1.5rem;
             border: none;
@@ -431,7 +429,7 @@
             box-shadow: 0 15px 40px rgba(245, 87, 108, 0.7);
         }
 
-        /* Mission Timeline */
+   
         .timeline-container {
             background: rgba(17, 24, 39, 0.8);
             backdrop-filter: blur(10px);
@@ -520,7 +518,6 @@
             font-size: 0.875rem;
         }
 
-        /* Status Indicators */
         .status-badge {
             display: inline-block;
             padding: 0.25rem 0.75rem;
@@ -548,7 +545,7 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
         
-        /* --- NEW: Communications Feed --- */
+    
         .feed-container {
             background: rgba(17, 24, 39, 0.8);
             backdrop-filter: blur(10px);
@@ -592,7 +589,6 @@
             font-weight: 600;
         }
 
-        /* Floating Action Button */
         .fab {
             position: fixed;
             bottom: 2rem;
@@ -621,7 +617,7 @@
             fill: white;
         }
         
-        /* --- MODAL STYLES --- */
+     
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -690,10 +686,9 @@
         .modal-message {
             color: #cbd5e1;
             line-height: 1.6;
-            white-space: pre-wrap; /* To respect newlines from the string */
+            white-space: pre-wrap; 
         }
         
-        /* --- NEW: Toast Notification --- */
         #toast-container {
             position: fixed;
             bottom: 2rem;
@@ -732,7 +727,6 @@
             }
         }
 
-        /* Responsive Design */
         @media (max-width: 1024px) {
             .dashboard-container {
                 grid-template-columns: 1fr;
@@ -760,15 +754,13 @@
     </style>
 </head>
 <body>
-    <!-- Galaxy Background -->
     <div class="galaxy-bg"></div>
     <div class="stars" id="stars"></div>
 
 
 
-    <!-- Main Dashboard -->
     <div class="dashboard-container">
-        <!-- Sidebar -->
+
         <aside class="sidebar">
             <h3>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -806,13 +798,13 @@
             </div>
 
             <button class="btn btn-chase" onclick="initiateChase()">
-                🚀 CLICK TO CHASE
+                CLICK TO CHASE
             </button>
         </aside>
 
-        <!-- Main Content -->
+       
         <main class="main-content">
-            <!-- Visualization Area -->
+          
             <div class="visualization-area">
                 <h2 style="color: #8b5cf6; margin-bottom: 1.5rem;">Real-Time Orbital Visualization</h2>
                 <div class="canvas-container">
@@ -826,10 +818,10 @@
                 </div>
             </div>
 
-            <!-- Control Panel -->
+          
             <div class="control-panel">
                 <div class="control-card">
-                    <h4>🎯 Mission Parameters</h4>
+                    <h4> Mission Parameters</h4>
                     <div class="input-group">
                         <label>Launch Window</label>
                         <input type="date" id="launchDate" value="2025-12-01">
@@ -846,7 +838,7 @@
                 </div>
 
                 <div class="control-card">
-                    <h4>📊 Orbital Mechanics</h4>
+                    <h4> Orbital Mechanics</h4>
                     <div class="input-group">
                         <label>Semi-Major Axis (AU)</label>
                         <input id="semi-major-axis" type="number" value="2.77" step="0.01">
@@ -876,14 +868,12 @@
                 </div>
             </div>
 
-            <!-- Mission Timeline -->
             <div class="timeline-container">
                 <div class="timeline-header">
                     <h3>Mission Timeline</h3>
                     <span class="status-badge status-warning">Planning Phase</span>
                 </div>
                 <div class="timeline">
-                    <!-- Timeline items will be dynamically generated if needed -->
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
                         <div class="timeline-content">
@@ -903,24 +893,23 @@
                 </div>
             </div>
             
-            <!-- NEW: Communications Feed -->
+           
             <div class="feed-container" style="margin-top: 2rem;">
                 <h3 class="feed-header">📡 Live Communications Feed</h3>
                 <div class="feed-log" id="feed-log">
-                    <!-- Log entries will be added here dynamically -->
+                  
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Floating Action Button -->
+
     <div class="fab" onclick="openSettings()">
         <svg viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
         </svg>
     </div>
 
-    <!-- Modal Structure -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close-btn" onclick="closeModal()">&times;</button>
@@ -929,12 +918,12 @@
         </div>
     </div>
     
-    <!-- Toast Container -->
+
     <div id="toast-container"></div>
 
 
     <script>
-        // --- MODAL & TOAST SCRIPT ---
+        
         const modal = document.getElementById('customModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalMessage = document.getElementById('modalMessage');
@@ -965,16 +954,16 @@
         document.addEventListener('keydown', e => (e.key === 'Escape' && modal.classList.contains('show')) && closeModal());
         modal.addEventListener('click', e => (e.target === modal) && closeModal());
 
-        // --- APPLICATION SCRIPT ---
+
         
-        // DOM Elements
+       
         const distanceEl = document.getElementById('distance-val');
         const velocityEl = document.getElementById('velocity-val');
         const approachEl = document.getElementById('approach-val');
         const statusBadgeEl = document.getElementById('mission-status-badge');
         const feedLogEl = document.getElementById('feed-log');
 
-        // Simulation State
+       
         const simulationStartDate = new Date();
         const nextApproachDate = new Date();
         nextApproachDate.setDate(simulationStartDate.getDate() + 147);
@@ -1006,9 +995,8 @@
         // --- Live Data Simulation ---
         function updateLiveData() {
             const now = new Date();
-            const timeElapsed = (now - simulationStartDate) / 1000; // in seconds
+            const timeElapsed = (now - simulationStartDate) / 1000; 
 
-            // Simulate distance changing with a sine wave for orbital effect
             const baseDistance = 2.47;
             const distanceVariation = Math.sin(timeElapsed / 50) * 0.1;
             distanceEl.innerHTML = `${(baseDistance + distanceVariation).toFixed(3)}<span class="data-unit">AU</span>`;
@@ -1025,7 +1013,7 @@
             const minutes = Math.floor((timeToApproach / 1000 / 60) % 60);
             approachEl.innerHTML = `${days}d ${hours}h ${minutes}m`;
             
-            // Update comms log periodically
+        
             if (now.getTime() - lastLogTime > (7000 + Math.random() * 5000)) {
                 addCommsLogEntry();
                 lastLogTime = now.getTime();
@@ -1041,11 +1029,10 @@
             newItem.innerHTML = `<span class="feed-timestamp">[${timestamp}]</span> <span class="feed-source">${log.source}:</span> ${log.message}`;
             
             feedLogEl.appendChild(newItem);
-            feedLogEl.scrollTop = feedLogEl.scrollHeight; // Auto-scroll
+            feedLogEl.scrollTop = feedLogEl.scrollHeight; 
         }
 
 
-        // --- Interactive Functions ---
         function initiateChase() {
             showModal('🚀 Chase Mission Initiated!', 'Calculating optimal intercept trajectory...<br>Estimated travel time: 14 months<br>ΔV required: 12.4 km/s');
             const asteroid = document.querySelector('.asteroid');
@@ -1057,11 +1044,11 @@
 
         function showAsteroidInfo() {
             showModal('31/ATLAS (2020 AV2)', 
-                '🪨 Type: Atira Asteroid<br>' +
-                '📏 Diameter: ~1.5 km<br>' +
-                '🌡️ Surface Temp: ~427°C<br>' +
-                '⚡ Rotation Period: 3.9 hours<br>' +
-                `🎯 Next Close Approach: ${approachEl.textContent}`);
+                ' Type: Atira Asteroid<br>' +
+                ' Diameter: ~1.5 km<br>' +
+                ' Surface Temp: ~427°C<br>' +
+                ' Rotation Period: 3.9 hours<br>' +
+                ` Next Close Approach: ${approachEl.textContent}`);
         }
 
         function calculateTrajectory() {
@@ -1137,20 +1124,21 @@
 
         function createShootingStar() {
             const star = document.createElement('div');
-            // ... styling ... (same as before)
+           
             document.body.appendChild(star);
-            // ... animation interval ... (same as before)
+            
         }
 
-        // --- INITIALIZATION ---
+    
         window.onload = function() {
             generateStars();
-            setInterval(updateLiveData, 1000); // Update every second
-            addCommsLogEntry(); // Initial log
+            setInterval(updateLiveData, 1000); 
+            addCommsLogEntry(); 
             lastLogTime = new Date().getTime();
         };
 
     </script>
 </body>
 </html>
+
 
