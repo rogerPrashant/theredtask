@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Red Task</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Galaxy Background */
+        .galaxy-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a0033 25%, #0d1117 50%, #1a0033 75%, #0a0e27 100%);
+            z-index: -2;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Navigation Header */
+        .nav-header {
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a:hover {
+            color: #8b5cf6;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Dashboard Container */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 5rem auto 2rem;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            min-height: calc(100vh - 7rem);
+        }
+
+        /* Sidebar Panel */
+        .sidebar {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 6rem;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .sidebar h3 {
+            color: #8b5cf6;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .data-card {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            transition: all 0.3s ease-out;
+        }
+
+        .data-card:hover {
+            transform: translateY(-4px) scale(1.03);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25);
+        }
+
+        .data-label {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-value {
+            color: #e2e8f0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .data-unit {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-left: 0.25rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Visualization Canvas */
+        .visualization-area {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 2rem;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease; /* Added for smooth zoom */
+        }
+
+        /* Solar System Animation */
+        .solar-system {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .sun {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #ffd700 0%, #ff8c00 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 60px #ff8c00, 0 0 100px #ff6347;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: border-color 1s ease;
+        }
+
+        .orbit-earth {
+            width: 250px;
+            height: 250px;
+        }
+
+        .orbit-asteroid {
+            width: 320px;
+            height: 320px;
+            border-color: rgba(255, 107, 107, 0.3);
+            border-style: dashed;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .planet {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #4fc3f7 0%, #2196f3 100%);
+            border-radius: 50%;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8);
+            animation: orbit-planet 20s linear infinite;
+        }
+
+        @keyframes orbit-planet {
+            from { transform: rotate(0deg) translateX(125px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(125px) rotate(-360deg); }
+        }
+
+        .asteroid {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, #ff6b6b 0%, #c92a2a 100%);
+            border-radius: 50%;
+            top: -7.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+            animation: orbit-asteroid 30s linear infinite;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        @keyframes orbit-asteroid {
+            from { transform: rotate(0deg) translateX(160px) rotate(0deg); }
+            to { transform: rotate(-360deg) translateX(160px) rotate(360deg); }
+        }
+
+        .asteroid:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 30px rgba(255, 107, 107, 1);
+        }
+
+        /* Control Panel */
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.3s;
+        }
+
+        .control-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .control-card h4 {
+            color: #8b5cf6;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-chase {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            padding: 1rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4); }
+            50% { box-shadow: 0 10px 30px rgba(245, 87, 108, 0.6); }
+        }
+
+        .btn-chase:hover {
+            transform: scale(1.05);
+            animation: none;
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.7);
+        }
+
+        /* Mission Timeline */
+        .timeline-container {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-header h3 {
+            color: #8b5cf6;
+            font-size: 1.3rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideInRight 0.6s ease-out forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+        }
+
+        .timeline-content {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .timeline-date {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        /* Status Indicators */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-warning {
+            background: rgba(251, 146, 60, 0.2);
+            color: #fb923c;
+            border: 1px solid rgba(251, 146, 60, 0.3);
+        }
+
+        .status-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        /* --- NEW: Communications Feed --- */
+        .feed-container {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        .feed-header {
+            color: #8b5cf6;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+        .feed-log {
+            height: 200px;
+            overflow-y: auto;
+            background: rgba(13, 17, 23, 0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        .feed-item {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+            padding-bottom: 0.75rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .feed-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .feed-timestamp {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        .feed-source {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.5);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.7);
+        }
+
+        .fab svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        
+        /* --- MODAL STYLES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(17, 24, 39, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .modal-close-btn:hover {
+            color: #8b5cf6;
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            color: #8b5cf6;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-message {
+            color: #cbd5e1;
+            line-height: 1.6;
+            white-space: pre-wrap; /* To respect newlines from the string */
+        }
+        
+        /* --- NEW: Toast Notification --- */
+        #toast-container {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .toast {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            color: #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFadeIn 0.5s ease forwards;
+        }
+        @keyframes slideUpFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .toast.fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Galaxy Background -->
+    <div class="galaxy-bg"></div>
+    <div class="stars" id="stars"></div>
+
+
+
+    <!-- Main Dashboard -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                    <circle cx="10" cy="10" r="2"/>
+                </svg>
+                31/ATLAS Status
+            </h3>
+            
+            <div class="data-card">
+                <div class="data-label">Current Distance</div>
+                <div id="distance-val" class="data-value">2.47<span class="data-unit">AU</span></div>
+            </div>
+            
+            <div class="data-card">
+                <div class="data-label">Velocity</div>
+                <div id="velocity-val" class="data-value">24.3<span class="data-unit">km/s</span></div>
+            </div>
+            
+            <div class="data-card">
+                <div class="data-label">Orbital Period</div>
+                <div class="data-value">4.62<span class="data-unit">years</span></div>
+            </div>
+            
+            <div class="data-card">
+                <div class="data-label">Next Approach</div>
+                <div id="approach-val" class="data-value">147<span class="data-unit">days</span></div>
+            </div>
+            
+            <div class="data-card">
+                <div class="data-label">Status</div>
+                <div style="margin-top: 0.5rem;">
+                    <span id="mission-status-badge" class="status-badge status-active">Tracking Active</span>
+                </div>
+            </div>
+
+            <button class="btn btn-chase" onclick="initiateChase()">
+                🚀 CLICK TO CHASE
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Visualization Area -->
+            <div class="visualization-area">
+                <h2 style="color: #8b5cf6; margin-bottom: 1.5rem;">Real-Time Orbital Visualization</h2>
+                <div class="canvas-container">
+                    <div class="solar-system">
+                        <div class="sun"></div>
+                        <div class="orbit orbit-earth"></div>
+                        <div class="orbit orbit-asteroid"></div>
+                        <div class="planet"></div>
+                        <div class="asteroid" onclick="showAsteroidInfo()"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="control-card">
+                    <h4>🎯 Mission Parameters</h4>
+                    <div class="input-group">
+                        <label>Launch Window</label>
+                        <input type="date" id="launchDate" value="2025-12-01">
+                    </div>
+                    <div class="input-group">
+                        <label>Mission Type</label>
+                        <select id="missionType">
+                            <option>Flyby</option>
+                            <option>Orbital Insertion</option>
+                            <option>Sample Return</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="calculateTrajectory()">Calculate Trajectory</button>
+                </div>
+
+                <div class="control-card">
+                    <h4>📊 Orbital Mechanics</h4>
+                    <div class="input-group">
+                        <label>Semi-Major Axis (AU)</label>
+                        <input id="semi-major-axis" type="number" value="2.77" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label>Eccentricity</label>
+                        <input id="eccentricity" type="number" value="0.33" step="0.01">
+                    </div>
+                    <button class="btn btn-primary" onclick="updateOrbitalData()">Update Simulation</button>
+                </div>
+
+                <div class="control-card">
+                    <h4>⚡ Quick Actions</h4>
+                    <div class="input-group">
+                        <label>Simulation Speed</label>
+                        <input type="range" min="1" max="100" value="50" oninput="updateSpeed(this.value)">
+                    </div>
+                    <div class="input-group">
+                        <label>View Mode</label>
+                        <select>
+                            <option>3D Perspective</option>
+                            <option>Top Down</option>
+                            <option>Side View</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="resetView()">Reset View</button>
+                </div>
+            </div>
+
+            <!-- Mission Timeline -->
+            <div class="timeline-container">
+                <div class="timeline-header">
+                    <h3>Mission Timeline</h3>
+                    <span class="status-badge status-warning">Planning Phase</span>
+                </div>
+                <div class="timeline">
+                    <!-- Timeline items will be dynamically generated if needed -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">December 1, 2025</div>
+                            <div class="timeline-title">Launch Window Opens</div>
+                            <div class="timeline-description">Optimal launch conditions for intercept trajectory</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">March 15, 2026</div>
+                            <div class="timeline-title">Mid-Course Correction</div>
+                            <div class="timeline-description">Trajectory adjustment for precision targeting</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NEW: Communications Feed -->
+            <div class="feed-container" style="margin-top: 2rem;">
+                <h3 class="feed-header">📡 Live Communications Feed</h3>
+                <div class="feed-log" id="feed-log">
+                    <!-- Log entries will be added here dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="openSettings()">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+            <h3 id="modalTitle" class="modal-title"></h3>
+            <p id="modalMessage" class="modal-message"></p>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+
+    <script>
+        // --- MODAL & TOAST SCRIPT ---
+        const modal = document.getElementById('customModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const toastContainer = document.getElementById('toast-container');
+
+        function showModal(title, message) {
+            modalTitle.innerText = title;
+            modalMessage.innerHTML = message;
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = message;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                toast.addEventListener('animationend', () => toast.remove());
+            }, 3000);
+        }
+
+        document.addEventListener('keydown', e => (e.key === 'Escape' && modal.classList.contains('show')) && closeModal());
+        modal.addEventListener('click', e => (e.target === modal) && closeModal());
+
+        // --- APPLICATION SCRIPT ---
+        
+        // DOM Elements
+        const distanceEl = document.getElementById('distance-val');
+        const velocityEl = document.getElementById('velocity-val');
+        const approachEl = document.getElementById('approach-val');
+        const statusBadgeEl = document.getElementById('mission-status-badge');
+        const feedLogEl = document.getElementById('feed-log');
+
+        // Simulation State
+        const simulationStartDate = new Date();
+        const nextApproachDate = new Date();
+        nextApproachDate.setDate(simulationStartDate.getDate() + 147);
+
+        const commsLogMessages = [
+            { source: 'DSN', message: 'Telemetry link stable. Signal strength nominal.' },
+            { source: 'NAV', message: 'Star tracker alignment confirmed with Canopus.' },
+            { source: 'SYS', message: 'Battery charge at 98%. Solar panel efficiency optimal.' },
+            { source: 'GNC', message: 'Minor momentum wheel desaturation complete.' },
+            { source: 'ORBIT', message: 'Trajectory analysis matches prediction. No correction needed.' },
+            { source: 'PAYLOAD', message: 'Spectrometer temperature holding steady at -180°C.' },
+            { source: 'DSN', message: 'Receiving data packet burst. Uplinking new sequence.'}
+        ];
+        let lastLogTime = 0;
+
+        function generateStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // --- Live Data Simulation ---
+        function updateLiveData() {
+            const now = new Date();
+            const timeElapsed = (now - simulationStartDate) / 1000; // in seconds
+
+            // Simulate distance changing with a sine wave for orbital effect
+            const baseDistance = 2.47;
+            const distanceVariation = Math.sin(timeElapsed / 50) * 0.1;
+            distanceEl.innerHTML = `${(baseDistance + distanceVariation).toFixed(3)}<span class="data-unit">AU</span>`;
+
+            // Simulate velocity
+            const baseVelocity = 24.3;
+            const velocityVariation = (Math.cos(timeElapsed / 50) * 1.5);
+            velocityEl.innerHTML = `${(baseVelocity + velocityVariation).toFixed(2)}<span class="data-unit">km/s</span>`;
+
+            // Update countdown
+            const timeToApproach = nextApproachDate - now;
+            const days = Math.floor(timeToApproach / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeToApproach / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((timeToApproach / 1000 / 60) % 60);
+            approachEl.innerHTML = `${days}d ${hours}h ${minutes}m`;
+            
+            // Update comms log periodically
+            if (now.getTime() - lastLogTime > (7000 + Math.random() * 5000)) {
+                addCommsLogEntry();
+                lastLogTime = now.getTime();
+            }
+        }
+        
+        function addCommsLogEntry() {
+            const log = commsLogMessages[Math.floor(Math.random() * commsLogMessages.length)];
+            const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
+            
+            const newItem = document.createElement('div');
+            newItem.className = 'feed-item';
+            newItem.innerHTML = `<span class="feed-timestamp">[${timestamp}]</span> <span class="feed-source">${log.source}:</span> ${log.message}`;
+            
+            feedLogEl.appendChild(newItem);
+            feedLogEl.scrollTop = feedLogEl.scrollHeight; // Auto-scroll
+        }
+
+
+        // --- Interactive Functions ---
+        function initiateChase() {
+            showModal('🚀 Chase Mission Initiated!', 'Calculating optimal intercept trajectory...<br>Estimated travel time: 14 months<br>ΔV required: 12.4 km/s');
+            const asteroid = document.querySelector('.asteroid');
+            asteroid.style.boxShadow = '0 0 50px rgba(255, 107, 107, 1)';
+            statusBadgeEl.textContent = 'Mission Active';
+            statusBadgeEl.className = 'status-badge status-critical';
+            addCommsLogEntry({ source: 'MISSION CTRL', message: 'CHASE PROTOCOL INITIATED. FIRING MAIN ENGINES.' });
+        }
+
+        function showAsteroidInfo() {
+            showModal('31/ATLAS (2020 AV2)', 
+                '🪨 Type: Atira Asteroid<br>' +
+                '📏 Diameter: ~1.5 km<br>' +
+                '🌡️ Surface Temp: ~427°C<br>' +
+                '⚡ Rotation Period: 3.9 hours<br>' +
+                `🎯 Next Close Approach: ${approachEl.textContent}`);
+        }
+
+        function calculateTrajectory() {
+            const launchDate = document.getElementById('launchDate').value;
+            const missionType = document.getElementById('missionType').value;
+            showModal('📡 Trajectory Calculation Complete!', 
+                `Launch Date: ${launchDate}<br>` +
+                `Mission Type: ${missionType}<br>` +
+                `Transfer Type: Hohmann Transfer<br>` +
+                `Total ΔV: 15.2 km/s<br>` +
+                `Flight Duration: 423 days`);
+        }
+
+        function updateOrbitalData() {
+            const semiMajorAxis = document.getElementById('semi-major-axis').value;
+            const eccentricity = document.getElementById('eccentricity').value;
+            showModal('✅ Orbital Mechanics Updated', `Simulation recalculating with:<br>Semi-Major Axis: ${semiMajorAxis} AU<br>Eccentricity: ${eccentricity}`);
+            
+            const orbits = document.querySelectorAll('.orbit');
+            orbits.forEach(orbit => {
+                orbit.style.borderColor = 'rgba(139, 92, 246, 0.8)';
+                setTimeout(() => orbit.style.borderColor = 'rgba(139, 92, 246, 0.2)', 1000);
+            });
+        }
+
+        function updateSpeed(value) {
+            const planet = document.querySelector('.planet');
+            const asteroid = document.querySelector('.asteroid');
+            const speed = 101 - value;
+            planet.style.animationDuration = `${speed * 0.2}s`;
+            asteroid.style.animationDuration = `${speed * 0.3}s`;
+            showToast(`Simulation speed set to ${value}%`);
+        }
+
+        function resetView() {
+            const visualization = document.querySelector('.canvas-container');
+            zoomLevel = 1;
+            visualization.style.transform = 'scale(1)';
+            showToast('View has been reset.');
+        }
+
+        function openSettings() {
+            showModal('⚙️ Advanced Settings', 
+                '• Enable High-Precision Mode<br>' +
+                '• Configure Data Sources<br>' +
+                '• Export Mission Plan<br>' +
+                '• Simulation Parameters<br>' +
+                '• Notification Preferences');
+        }
+
+        let zoomLevel = 1;
+        document.querySelector('.canvas-container').addEventListener('wheel', function(e) {
+            e.preventDefault();
+            zoomLevel = e.deltaY < 0 ? Math.min(zoomLevel + 0.1, 2) : Math.max(zoomLevel - 0.1, 0.5);
+            this.style.transform = `scale(${zoomLevel})`;
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (modal.classList.contains('show')) return;
+            const actions = { ' ': () => togglePause(), 'r': resetView, 'c': initiateChase };
+            if (actions[e.key]) {
+                e.preventDefault();
+                actions[e.key]();
+            }
+        });
+        
+        function togglePause() {
+            const bodies = document.querySelectorAll('.planet, .asteroid');
+            const isPaused = bodies[0].style.animationPlayState === 'paused';
+            bodies.forEach(body => body.style.animationPlayState = isPaused ? 'running' : 'paused');
+            showToast(isPaused ? 'Simulation Resumed' : 'Simulation Paused');
+        }
+
+        function createShootingStar() {
+            const star = document.createElement('div');
+            // ... styling ... (same as before)
+            document.body.appendChild(star);
+            // ... animation interval ... (same as before)
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            generateStars();
+            setInterval(updateLiveData, 1000); // Update every second
+            addCommsLogEntry(); // Initial log
+            lastLogTime = new Date().getTime();
+        };
+
+    </script>
+</body>
+</html>
+
