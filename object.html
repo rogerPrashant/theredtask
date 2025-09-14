@@ -874,7 +874,7 @@
             
            
             <div class="feed-container" style="margin-top: 2rem;">
-                <h3 class="feed-header">📡 Live Communications Feed</h3>
+                <h3 class="feed-header"> Live Communications Feed</h3>
                 <div class="feed-log" id="feed-log">
                   
                 </div>
@@ -970,8 +970,7 @@
                 starsContainer.appendChild(star);
             }
         }
-        
-        // --- Live Data Simulation ---
+     
         function updateLiveData() {
             const now = new Date();
             const timeElapsed = (now - simulationStartDate) / 1000; 
@@ -980,12 +979,10 @@
             const distanceVariation = Math.sin(timeElapsed / 50) * 0.1;
             distanceEl.innerHTML = `${(baseDistance + distanceVariation).toFixed(3)}<span class="data-unit">AU</span>`;
 
-            // Simulate velocity
             const baseVelocity = 24.3;
             const velocityVariation = (Math.cos(timeElapsed / 50) * 1.5);
             velocityEl.innerHTML = `${(baseVelocity + velocityVariation).toFixed(2)}<span class="data-unit">km/s</span>`;
 
-            // Update countdown
             const timeToApproach = nextApproachDate - now;
             const days = Math.floor(timeToApproach / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeToApproach / (1000 * 60 * 60)) % 24);
@@ -1013,7 +1010,7 @@
 
 
         function initiateChase() {
-            showModal('🚀 Chase Mission Initiated!', 'Calculating optimal intercept trajectory...<br>Estimated travel time: 14 months<br>ΔV required: 12.4 km/s');
+            showModal(' Chase Mission Initiated!', 'Calculating optimal intercept trajectory...<br>Estimated travel time: 14 months<br>ΔV required: 12.4 km/s');
             const asteroid = document.querySelector('.asteroid');
             asteroid.style.boxShadow = '0 0 50px rgba(255, 107, 107, 1)';
             statusBadgeEl.textContent = 'Mission Active';
@@ -1033,7 +1030,7 @@
         function calculateTrajectory() {
             const launchDate = document.getElementById('launchDate').value;
             const missionType = document.getElementById('missionType').value;
-            showModal('📡 Trajectory Calculation Complete!', 
+            showModal(' Trajectory Calculation Complete!', 
                 `Launch Date: ${launchDate}<br>` +
                 `Mission Type: ${missionType}<br>` +
                 `Transfer Type: Hohmann Transfer<br>` +
@@ -1044,7 +1041,7 @@
         function updateOrbitalData() {
             const semiMajorAxis = document.getElementById('semi-major-axis').value;
             const eccentricity = document.getElementById('eccentricity').value;
-            showModal('✅ Orbital Mechanics Updated', `Simulation recalculating with:<br>Semi-Major Axis: ${semiMajorAxis} AU<br>Eccentricity: ${eccentricity}`);
+            showModal(' Orbital Mechanics Updated', `Simulation recalculating with:<br>Semi-Major Axis: ${semiMajorAxis} AU<br>Eccentricity: ${eccentricity}`);
             
             const orbits = document.querySelectorAll('.orbit');
             orbits.forEach(orbit => {
@@ -1119,6 +1116,7 @@
     </script>
 </body>
 </html>
+
 
 
 
